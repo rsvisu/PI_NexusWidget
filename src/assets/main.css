@@ -1,35 +1,19 @@
-@import './base.css';
+@import "tailwindcss";
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-}
+@theme {
+  /* - Colores Corporativos: */
+  --color-brand: #e7751e;       /* Naranja principal de Los Enlaces */
+  --color-brand-light: #f3944a;
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
+  /* - Colores Semánticos: */
+  --color-chat-surface: #ffffff;      /* Fondo de la ventana */
+  --color-chat-canvas: #f9fafb;       /* Fondo de la zona de mensajes */
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
+  --color-chat-bubble-user: #e2e8f0;  /* Color de la burbuja del usuario */
+  --color-chat-bubble-bot: #f3f4f6;   /* Color de la burbuja del bot */
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+  /* - Textos */
+  --color-chat-text-main: #1f2937;    /* Texto oscuro para los mensajes */
+  --color-chat-text-muted: #6b7280;   /* Letra pequeña para fuentes y feedback */
+  --color-chat-text-inverse: #ffffff; /* Texto blanco (para la cabecera y botones naranjas) */
 }

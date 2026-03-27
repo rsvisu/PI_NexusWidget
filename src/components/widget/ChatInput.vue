@@ -1,0 +1,99 @@
+<script setup>
+import { useWidgetStore } from '@/stores/widget'
+import { nextTick, ref, watch } from 'vue'
+import Send from '~icons/material-symbols/send-rounded'
+
+// Stores
+const widget = useWidgetStore()
+
+// Variables
+const messageText = ref('')
+
+// Referencias al DOM
+const messageDomInput = ref(null)
+
+// Watchers:
+// Enfocar el textarea cuando se abra el chat
+watch(
+  () => widget.open,
+  (isOpen) => {
+    // Si el widget se esta abriendo, enfocamos el input
+    if (isOpen) {
+      // Esperamos hasta el siguiente tick para esperar a que este disponible
+      nextTick(() => {
+        messageDomInput.value?.focus()
+      })
+    }
+  },
+)
+
+// Funciones:
+// Función para autoajustar la altura del textarea
+const autoResize = () => {
+  const textarea = messageDomInput.value
+
+  if (!textarea) return
+
+  textarea.style.height = 'auto'
+  textarea.style.height = `${textarea.scrollHeight}px`
+}
+
+// Función para manejar el enter del textarea para envío del mensaje
+const handleEnterButton = (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault() // Evitar salto de línea
+    handleSend()
+  }
+}
+
+// Funcion para manejar el envio del mensaje
+function handleSend() {
+  if (!messageText.value.trim()) return
+
+  sendMessage(messageText.value.trim())
+  messageText.value = ''
+  autoResize() // Ajustar la altura después de limpiar el mensaje
+}
+
+// Función para enviar el mensaje
+const sendMessage = (message) => {
+  message = message.trim()
+  // TODO: Implementar lógica para enviar el mensaje
+  console.log('Mensaje enviado:', message)
+}
+</script>
+
+<template>
+  <div class="p-4 border-t border-gray-200 bg-gray-100">
+    <div class="flex bg-white border border-gray-300 rounded-md">
+      <textarea
+        rows="1"
+        placeholder="Escribe tu mensaje..."
+        class="w-full max-h-30 p-2 rounded-md focus:outline-none resize-none overflow-y-auto overflow-x-hidden no-scrollbar"
+        ref="messageDomInput"
+        v-model="messageText"
+        @input="autoResize"
+        @keydown="handleEnterButton"
+      ></textarea>
+      <button
+        class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors"
+        @click="handleSend"
+      >
+        <Send class="text-brand size-8" />
+      </button>
+    </div>
+  </div>
+</template>
+
+<style>
+/* Scrollbar */
+/* Para Chrome, Safari y Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Para IE, Edge y Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+</style>

@@ -1,16 +1,16 @@
 <script setup>
-import { ref } from 'vue'
 import ButtonWidget from './widget/ButtonWidget.vue'
 import ChatContainer from './widget/ChatContainer.vue'
+import { useWidgetStore } from '@/stores/widget'
 
-let chatOpen = ref(false)
+const widget = useWidgetStore()
 
 function widgetClicked() {
-  chatOpen.value = !chatOpen.value
+  widget.toggle()
 }
 </script>
 
 <template>
   <ButtonWidget class="fixed bottom-4 right-4" @click="widgetClicked" />
-  <ChatContainer class="fixed bottom-30 right-4" :open="chatOpen" />
+  <ChatContainer class="fixed bottom-30 right-4" />
 </template>

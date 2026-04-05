@@ -1,6 +1,6 @@
 <script setup>
 import ButtonWidget from './widget/ButtonWidget.vue'
-import ChatContainer from './widget/ChatContainer.vue'
+import ChatContainer from './widget/chat/ChatContainer.vue'
 import { useWidgetStore } from '@/stores/widget'
 
 const widget = useWidgetStore()

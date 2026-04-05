@@ -2,6 +2,15 @@
 import Minimize from '~icons/mingcute/minimize-fill'
 import Maximize from '~icons/gg/maximize-alt'
 import Close from '~icons/material-symbols/close'
+import { useWidgetStore } from '@/stores/widget'
+
+// Stores
+const widget = useWidgetStore()
+
+// Funciones
+function handleClose() {
+  widget.toggle()
+}
 </script>
 
 <template>
@@ -15,9 +24,9 @@ import Close from '~icons/material-symbols/close'
     <div
       class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100"
     >
-      <Minimize />
+      <!-- <Minimize /> -->
       <Maximize />
-      <Close />
+      <Close @click="handleClose" />
     </div>
   </div>
 </template>

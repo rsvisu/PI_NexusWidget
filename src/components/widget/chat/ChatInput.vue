@@ -1,10 +1,12 @@
 <script setup>
 import { useWidgetStore } from '@/stores/widget'
+import { useChatStore } from '@/stores/chat'
 import { nextTick, ref, watch } from 'vue'
 import Send from '~icons/material-symbols/send-rounded'
 
 // Stores
 const widget = useWidgetStore()
+const chat = useChatStore()
 
 // Variables
 const messageText = ref('')
@@ -29,17 +31,19 @@ watch(
 
 // Funciones:
 // Función para autoajustar la altura del textarea
-const autoResize = () => {
+function autoResize() {
   const textarea = messageDomInput.value
 
   if (!textarea) return
 
   textarea.style.height = 'auto'
-  textarea.style.height = `${textarea.scrollHeight}px`
+  nextTick(() => {
+    textarea.style.height = `${textarea.scrollHeight}px`
+  })
 }
 
 // Función para manejar el enter del textarea para envío del mensaje
-const handleEnterButton = (event) => {
+function handleEnterButton(event) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault() // Evitar salto de línea
     handleSend()
@@ -52,14 +56,15 @@ function handleSend() {
 
   sendMessage(messageText.value.trim())
   messageText.value = ''
-  autoResize() // Ajustar la altura después de limpiar el mensaje
+  autoResize()  // Ajustar la altura después de limpiar el mensaje
 }
 
 // Función para enviar el mensaje
-const sendMessage = (message) => {
+function sendMessage(message) {
   message = message.trim()
   // TODO: Implementar lógica para enviar el mensaje
-  console.log('Mensaje enviado:', message)
+  chat.addMessage(message, "user")
+  console.log(chat.messages)
 }
 </script>
 
@@ -69,7 +74,7 @@ const sendMessage = (message) => {
       <textarea
         rows="1"
         placeholder="Escribe tu mensaje..."
-        class="w-full max-h-30 p-2 rounded-md focus:outline-none resize-none overflow-y-auto overflow-x-hidden no-scrollbar"
+        class="w-full max-h-30 p-2 rounded-md focus:outline-none resize-none overflow-y-auto no-scrollbar"
         ref="messageDomInput"
         v-model="messageText"
         @input="autoResize"

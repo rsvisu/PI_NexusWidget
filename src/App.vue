@@ -7,5 +7,3 @@ import ExamplePage from './components/examples/ExamplePage.vue'
   <ExamplePage />
   <Chatbot />
 </template>
-
-<style scoped></style>

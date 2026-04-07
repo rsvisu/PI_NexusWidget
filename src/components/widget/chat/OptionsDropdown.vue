@@ -3,9 +3,11 @@ import MoreVert from '~icons/material-symbols/more-vert'
 import { PRIVACY_POLICY_URL } from '@/config/legal'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useWidgetStore } from '@/stores/widget'
+import { useChatStore } from '@/stores/chat'
 
 // Stores:
 const widget = useWidgetStore()
+const chat = useChatStore()
 
 // Variables:
 const showOptionsMenu = ref(false)
@@ -24,6 +26,7 @@ function closeOptionsMenu() {
 
 function handleForgetData() {
   widget.forgetStoredData()
+  chat.forgetStoredData()
   closeOptionsMenu()
 }
 
@@ -41,22 +44,32 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleDocumentClick)
 })
-
 </script>
 
 <template>
-  <div class="relative" ref="optionsMenuRef">
-    <button type="button" class="size-6 cursor-pointer" @click="toggleOptionsMenu">
+  <div class="relative flex justify-center items-center" ref="optionsMenuRef">
+    <button type="button" class="cursor-pointer w-full h-full" @click="toggleOptionsMenu">
       <MoreVert class="w-full h-full cursor-pointer" />
     </button>
 
     <Transition name="dropdown-fade">
-      <div v-if="showOptionsMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 text-gray-800 overflow-hidden">
-        <button @click="handleForgetData" class="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
+      <div
+        v-if="showOptionsMenu"
+        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 text-gray-800 overflow-hidden"
+      >
+        <button
+          @click="handleForgetData"
+          class="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+        >
           Olvidar mis datos
         </button>
-        <a :href="PRIVACY_POLICY_URL" target="_blank" rel="noopener noreferrer"
-          class="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer" @click="closeOptionsMenu">
+        <a
+          :href="PRIVACY_POLICY_URL"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+          @click="closeOptionsMenu"
+        >
           Politica de privacidad
         </a>
       </div>
@@ -67,7 +80,9 @@ onBeforeUnmount(() => {
 <style scoped>
 .dropdown-fade-enter-active,
 .dropdown-fade-leave-active {
-  transition: opacity 0.16s ease, transform 0.16s ease;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
 }
 
 .dropdown-fade-enter-from,

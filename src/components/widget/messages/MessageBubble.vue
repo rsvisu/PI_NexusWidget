@@ -48,20 +48,37 @@ async function copyMessage() {
 </script>
 
 <template>
-  <div class="mt-2 max-w-[90%] flex flex-col" :class="bubbleClasses">
+  <div class="message-bubble mt-2 max-w-[90%] flex flex-col" :class="bubbleClasses">
     <!-- Message -->
     <div class="wrap-break-word px-4 py-2 rounded-xl shadow-sm" :class="messageClasses">
       {{ props.message }}
     </div>
     <!-- Copy Button -->
-    <div class="flex items-center gap-2 mt-1 px-1 text-xs text-chat-text-muted" :class="copiedClasses">
-      <button type="button" class="p-1 rounded hover:bg-gray-200 transition-colors cursor-pointer"
-        @click="copyMessage">
+    <div
+      class="copy-actions flex items-center gap-2 mt-1 px-1 text-xs text-chat-text-muted"
+      :class="copiedClasses"
+    >
+      <button
+        type="button"
+        class="p-1 rounded hover:bg-gray-200 transition-colors cursor-pointer"
+        @click="copyMessage"
+      >
         <CopyIcon class="size-4" />
       </button>
-      <span v-if="copied" class="text-brand">
-        Copiado
-      </span>
+      <span v-if="copied" class="text-brand"> Copiado </span>
     </div>
   </div>
 </template>
+
+<style scoped>
+.message-bubble .copy-actions {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.message-bubble:hover .copy-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+</style>

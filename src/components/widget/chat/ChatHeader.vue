@@ -4,7 +4,7 @@ import Minimize from '~icons/gg/minimize'
 import MinimizeFill from '~icons/mingcute/minimize-fill'
 // import Close from '~icons/material-symbols/close'
 import { useWidgetStore } from '@/stores/widget'
-import { useIsMobile } from '@/components/composables/useIsMobile'
+import { useIsMobile } from '@/composables/useIsMobile'
 import logoFace from '@/assets/logo-face.svg'
 import OptionsDropdown from './OptionsDropdown.vue'
 

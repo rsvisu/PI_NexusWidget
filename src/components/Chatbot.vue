@@ -2,7 +2,7 @@
 import ButtonWidget from './widget/ButtonWidget.vue'
 import ChatContainer from './widget/chat/ChatContainer.vue'
 import { useWidgetStore } from '@/stores/widget'
-import { useIsMobile } from './composables/useIsMobile'
+import { useIsMobile } from '../composables/useIsMobile'
 
 // Stores:
 const widget = useWidgetStore()

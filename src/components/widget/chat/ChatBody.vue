@@ -2,15 +2,44 @@
 import { useChatStore } from '@/stores/chat'
 import MessageBubble from '../messages/MessageBubble.vue'
 import TypingIndicator from '../messages/TypingIndicator.vue'
-import MessageBubble from '../messages/MessageBubble.vue';
+import { nextTick, ref, watch } from 'vue'
+import { useWidgetStore } from '@/stores/widget'
 
 // Stores:
 const chat = useChatStore()
+const widget = useWidgetStore()
 
+// Referencias al DOM:
+const chatContainerRef = ref(null)
+
+// Funciones:
+async function scrollToBottom(smooth = true) {
+  await nextTick()
+
+  chatContainerRef.value.scrollTo({
+    top: chatContainerRef.value.scrollHeight,
+    behavior: smooth ? 'smooth' : 'auto',
+  })
+}
+
+// Watchers:
+watch(
+  () => chat.messages.length,
+  () => scrollToBottom(),
+)
+
+watch(
+  () => widget.isOpen,
+  (isOpen) => {
+    if (isOpen) {
+      scrollToBottom(false)
+    }
+  },
+)
 </script>
 
 <template>
-  <div class="flex-1 min-h-0 flex flex-col p-4 py-2 overflow-y-auto">
+  <div class="flex-1 min-h-0 flex flex-col p-4 py-2 overflow-y-scroll" ref="chatContainerRef">
     <MessageBubble
       v-for="message in chat.messages"
       :key="message.id"

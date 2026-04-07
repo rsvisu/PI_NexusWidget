@@ -8,7 +8,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  senderType: {
+  role: {
     type: String,
     required: true,
   },
@@ -16,26 +16,20 @@ const props = defineProps({
 
 // Variables:
 const copied = ref(false)
-const isUserMessage = computed(() => props.senderType === 'user')
+const isUserMessage = computed(() => props.role === 'user')
 
 // Clases dinamicas:
 const bubbleClasses = computed(() =>
-  isUserMessage.value
-    ? "self-end items-end"
-    : "self-start items-start",
+  isUserMessage.value ? 'self-end items-end' : 'self-start items-start',
 )
 
 const messageClasses = computed(() =>
   isUserMessage.value
-    ? "bg-brand text-white rounded-br-sm"
-    : "bg-gray-100 text-gray-800 rounded-bl-sm",
+    ? 'bg-brand text-white rounded-br-sm'
+    : 'bg-gray-100 text-gray-800 rounded-bl-sm',
 )
 
-const copiedClasses = computed(() =>
-  isUserMessage.value
-    ? "flex-row-reverse"
-    : ""
-)
+const copiedClasses = computed(() => (isUserMessage.value ? 'flex-row-reverse' : ''))
 
 // Funciones:
 // Funcion copiar mensaje

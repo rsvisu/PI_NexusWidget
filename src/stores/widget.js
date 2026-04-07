@@ -1,6 +1,11 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
+function forgetStoredData() {
+  localStorage.removeItem('nexus/widget')
+  globalThis.location.reload()
+}
+
 export const useWidgetStore = defineStore('widget', () => {
   const isOpen = ref(false)
   const isMaximized = ref(false)
@@ -8,14 +13,14 @@ export const useWidgetStore = defineStore('widget', () => {
 
   function toggleOpen() {
     isOpen.value = !isOpen.value
-    if(!isOpen.value) {
+    if (!isOpen.value) {
       isMaximized.value = false
     }
   }
 
   function toggleMaximize() {
     isMaximized.value = !isMaximized.value
-    if(isMaximized.value) {
+    if (isMaximized.value) {
       isOpen.value = true
     }
   }
@@ -26,11 +31,6 @@ export const useWidgetStore = defineStore('widget', () => {
 
   function resetConsent() {
     hasConsent.value = false
-  }
-
-  function forgetStoredData() {
-    localStorage.removeItem('nexus/widget')
-    window.location.reload()
   }
 
   return { isOpen, isMaximized, hasConsent, toggleOpen, toggleMaximize, acceptConsent, resetConsent, forgetStoredData }

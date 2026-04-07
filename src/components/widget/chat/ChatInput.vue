@@ -52,30 +52,34 @@ function handleEnterButton(event) {
 
 // Manejar el envio del mensaje
 function handleSend() {
-  if (!messageText.value.trim()) return
+  const text = messageText.value.trim()
+  if (!text || chat.isLoading) return
 
-  sendMessage(messageText.value.trim())
+  chat.sendMessage(text)
+
+  // Limpiar UI
   messageText.value = ''
-  autoResize()  // Ajustar la altura después de limpiar el mensaje
-}
-
-// Enviar el mensaje
-function sendMessage(message) {
-  message = message.trim()
-  // TODO: Implementar lógica para enviar el mensaje
-  chat.addMessage(message, "user")
-  console.log(chat.messages)
+  autoResize() // Ajustar la altura después de limpiar el mensaje
 }
 </script>
 
 <template>
   <div class="p-4 border-t border-gray-200 bg-gray-100">
     <div class="flex bg-white border border-gray-300 rounded-md">
-      <textarea rows="1" placeholder="Escribe tu mensaje..."
+      <textarea
+        rows="1"
+        placeholder="Escribe tu mensaje..."
         class="w-full max-h-30 p-2 rounded-md focus:outline-none resize-none overflow-y-auto no-scrollbar"
-        ref="messageInputRef" v-model="messageText" @input="autoResize" @keydown="handleEnterButton"></textarea>
-      <button class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors"
-        @click="handleSend">
+        :disabled="chat.isLoading"
+        ref="messageInputRef"
+        v-model="messageText"
+        @input="autoResize"
+        @keydown="handleEnterButton"
+      ></textarea>
+      <button
+        class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors"
+        @click="handleSend"
+      >
         <Send class="text-brand size-8" />
       </button>
     </div>

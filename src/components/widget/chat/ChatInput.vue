@@ -4,14 +4,14 @@ import { useChatStore } from '@/stores/chat'
 import { nextTick, ref, watch } from 'vue'
 import Send from '~icons/material-symbols/send-rounded'
 
-// Stores
+// Stores:
 const widget = useWidgetStore()
 const chat = useChatStore()
 
-// Variables
+// Variables:
 const messageText = ref('')
 
-// Referencias al DOM
+// Referencias al DOM:
 const messageDomInput = ref(null)
 
 // Watchers:
@@ -30,7 +30,7 @@ watch(
 )
 
 // Funciones:
-// Función para autoajustar la altura del textarea
+// Autoajustar la altura del textarea
 function autoResize() {
   const textarea = messageDomInput.value
 
@@ -42,7 +42,7 @@ function autoResize() {
   })
 }
 
-// Función para manejar el enter del textarea para envío del mensaje
+// Manejar el enter del textarea para envío del mensaje
 function handleEnterButton(event) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault() // Evitar salto de línea
@@ -50,7 +50,7 @@ function handleEnterButton(event) {
   }
 }
 
-// Funcion para manejar el envio del mensaje
+// Manejar el envio del mensaje
 function handleSend() {
   if (!messageText.value.trim()) return
 
@@ -59,7 +59,7 @@ function handleSend() {
   autoResize()  // Ajustar la altura después de limpiar el mensaje
 }
 
-// Función para enviar el mensaje
+// Enviar el mensaje
 function sendMessage(message) {
   message = message.trim()
   // TODO: Implementar lógica para enviar el mensaje

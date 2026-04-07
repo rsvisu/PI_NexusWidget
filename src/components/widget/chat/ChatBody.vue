@@ -2,7 +2,7 @@
 import { useChatStore } from '@/stores/chat'
 import MessageBubble from '../messages/MessageBubble.vue';
 
-// Stores
+// Stores:
 const chat = useChatStore()
 
 </script>

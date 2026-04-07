@@ -2,13 +2,14 @@
 import Maximize from '~icons/gg/maximize-alt'
 import Minimize from '~icons/gg/minimize'
 import MinimizeFill from '~icons/mingcute/minimize-fill'
-import Close from '~icons/material-symbols/close'
+// import Close from '~icons/material-symbols/close'
 import { useWidgetStore } from '@/stores/widget'
+import logoFace from '@/assets/logo-face.svg'
 
-// Stores
+// Stores:
 const widget = useWidgetStore()
 
-// Funciones
+// Funciones:
 function handleClose() {
   widget.toggleOpen()
 }
@@ -22,7 +23,7 @@ function handleMaximize() {
   <div class="bg-brand h-20 flex justify-between px-2">
     <!-- Logo -->
     <div class="flex items-center gap-1">
-      <img src="@/assets/logo_face.svg" alt="Logo" class="size-15" />
+      <img :src="logoFace" alt="Logo" class="size-15" />
       <span class="text-white font-semibold">Nexus</span>
     </div>
     <!-- Actions -->

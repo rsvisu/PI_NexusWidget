@@ -6,6 +6,7 @@ import MinimizeFill from '~icons/mingcute/minimize-fill'
 import { useWidgetStore } from '@/stores/widget'
 import { useIsMobile } from '@/components/composables/useIsMobile'
 import logoFace from '@/assets/logo-face.svg'
+import OptionsDropdown from './OptionsDropdown.vue'
 
 // Stores:
 const widget = useWidgetStore()
@@ -21,6 +22,8 @@ function handleClose() {
 function handleMaximize() {
   widget.toggleMaximize()
 }
+
+
 </script>
 
 <template>
@@ -31,10 +34,12 @@ function handleMaximize() {
       <span class="text-white font-semibold">Nexus</span>
     </div>
     <!-- Actions -->
-    <div class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100">
+    <div
+      class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100">
       <Maximize v-if="!isMobile && !widget.isMaximized" @click="handleMaximize" />
       <Minimize v-if="!isMobile && widget.isMaximized" @click="handleMaximize" />
       <MinimizeFill @click="handleClose" />
+      <OptionsDropdown />
     </div>
   </div>
 </template>

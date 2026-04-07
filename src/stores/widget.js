@@ -28,7 +28,12 @@ export const useWidgetStore = defineStore('widget', () => {
     hasConsent.value = false
   }
 
-  return { isOpen, isMaximized, hasConsent, toggleOpen, toggleMaximize, acceptConsent, resetConsent }
+  function forgetStoredData() {
+    localStorage.removeItem('nexus/widget')
+    window.location.reload()
+  }
+
+  return { isOpen, isMaximized, hasConsent, toggleOpen, toggleMaximize, acceptConsent, resetConsent, forgetStoredData }
 }, {
   persist: {
     key: 'nexus/widget',

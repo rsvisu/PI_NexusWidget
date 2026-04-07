@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import CopyIcon from '~icons/material-symbols/content-copy-rounded'
 
-// Props
+// Props:
 const props = defineProps({
   message: {
     type: String,
@@ -14,11 +14,11 @@ const props = defineProps({
   },
 })
 
-// Variables
+// Variables:
 const copied = ref(false)
 const isUserMessage = computed(() => props.senderType === 'user')
 
-// Clases dinamicas
+// Clases dinamicas:
 const bubbleClasses = computed(() =>
   isUserMessage.value
     ? "self-end items-end"
@@ -37,6 +37,7 @@ const copiedClasses = computed(() =>
     : ""
 )
 
+// Funciones:
 // Funcion copiar mensaje
 async function copyMessage() {
   try {
@@ -54,11 +55,13 @@ async function copyMessage() {
 
 <template>
   <div class="mt-2 max-w-[90%] flex flex-col" :class="bubbleClasses">
+    <!-- Message -->
     <div class="wrap-break-word px-4 py-2 rounded-xl shadow-sm" :class="messageClasses">
       {{ props.message }}
     </div>
+    <!-- Copy Button -->
     <div class="flex items-center gap-2 mt-1 px-1 text-xs text-chat-text-muted" :class="copiedClasses">
-      <button type="button" class="p-1 rounded hover:bg-gray-200 transition-colors" aria-label="Copiar mensaje"
+      <button type="button" class="p-1 rounded hover:bg-gray-200 transition-colors cursor-pointer"
         @click="copyMessage">
         <CopyIcon class="size-4" />
       </button>

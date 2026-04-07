@@ -7,11 +7,16 @@ export const useWidgetStore = defineStore('widget', () => {
 
   function toggleOpen() {
     isOpen.value = !isOpen.value
-    isMaximized.value = false
+    if(!isOpen.value) {
+      isMaximized.value = false
+    }
   }
 
   function toggleMaximize() {
     isMaximized.value = !isMaximized.value
+    if(isMaximized.value) {
+      isOpen.value = true
+    }
   }
 
   return { isOpen, isMaximized, toggleOpen, toggleMaximize }

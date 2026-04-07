@@ -4,10 +4,14 @@ import Minimize from '~icons/gg/minimize'
 import MinimizeFill from '~icons/mingcute/minimize-fill'
 // import Close from '~icons/material-symbols/close'
 import { useWidgetStore } from '@/stores/widget'
+import { useIsMobile } from '@/components/composables/useIsMobile'
 import logoFace from '@/assets/logo-face.svg'
 
 // Stores:
 const widget = useWidgetStore()
+
+// Variables:
+const isMobile = useIsMobile()
 
 // Funciones:
 function handleClose() {
@@ -27,10 +31,9 @@ function handleMaximize() {
       <span class="text-white font-semibold">Nexus</span>
     </div>
     <!-- Actions -->
-    <div
-      class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100">
-      <Maximize v-if="!widget.isMaximized" @click="handleMaximize" />
-      <Minimize v-if="widget.isMaximized" @click="handleMaximize" />
+    <div class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100">
+      <Maximize v-if="!isMobile && !widget.isMaximized" @click="handleMaximize" />
+      <Minimize v-if="!isMobile && widget.isMaximized" @click="handleMaximize" />
       <MinimizeFill @click="handleClose" />
     </div>
   </div>

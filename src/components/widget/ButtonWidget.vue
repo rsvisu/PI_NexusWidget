@@ -24,13 +24,14 @@ const widget = useWidgetStore()
 .button-leave-active {
   transition: opacity 0.1s ease;
 }
+
 .button-enter-from,
 .button-leave-to {
   opacity: 0;
 }
 
-.chat-enter-to,
-.chat-leave-from {
+.button-enter-to,
+.button-leave-from {
   opacity: 1;
 }
 </style>

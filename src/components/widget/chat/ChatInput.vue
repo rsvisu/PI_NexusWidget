@@ -12,7 +12,7 @@ const chat = useChatStore()
 const messageText = ref('')
 
 // Referencias al DOM:
-const messageDomInput = ref(null)
+const messageInputRef = ref(null)
 
 // Watchers:
 // Enfocar el textarea cuando se abra el chat
@@ -23,7 +23,7 @@ watch(
     if (isOpen) {
       // Esperamos hasta el siguiente tick para esperar a que este disponible
       nextTick(() => {
-        messageDomInput.value?.focus()
+        messageInputRef.value?.focus()
       })
     }
   },
@@ -32,7 +32,7 @@ watch(
 // Funciones:
 // Autoajustar la altura del textarea
 function autoResize() {
-  const textarea = messageDomInput.value
+  const textarea = messageInputRef.value
 
   if (!textarea) return
 
@@ -73,7 +73,7 @@ function sendMessage(message) {
     <div class="flex bg-white border border-gray-300 rounded-md">
       <textarea rows="1" placeholder="Escribe tu mensaje..."
         class="w-full max-h-30 p-2 rounded-md focus:outline-none resize-none overflow-y-auto no-scrollbar"
-        ref="messageDomInput" v-model="messageText" @input="autoResize" @keydown="handleEnterButton"></textarea>
+        ref="messageInputRef" v-model="messageText" @input="autoResize" @keydown="handleEnterButton"></textarea>
       <button class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors"
         @click="handleSend">
         <Send class="text-brand size-8" />

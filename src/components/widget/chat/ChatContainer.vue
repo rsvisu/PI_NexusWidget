@@ -4,6 +4,7 @@ import { useWidgetStore } from '@/stores/widget'
 import ChatInput from './ChatInput.vue'
 import ChatHeader from './ChatHeader.vue'
 import ChatBody from './ChatBody.vue'
+import ChatConsent from '../legal/ChatConsent.vue'
 
 // Stores:
 const widget = useWidgetStore()
@@ -31,7 +32,10 @@ onBeforeUnmount(() => {
 <template>
   <div>
     <ChatHeader />
-    <ChatBody />
-    <ChatInput />
+    <ChatConsent v-if="!widget.hasConsent" />
+    <template v-else>
+      <ChatBody />
+      <ChatInput />
+    </template>
   </div>
 </template>

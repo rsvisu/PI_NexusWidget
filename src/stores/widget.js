@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 export const useWidgetStore = defineStore('widget', () => {
   const isOpen = ref(false)
   const isMaximized = ref(false)
+  const hasConsent = ref(false)
 
   function toggleOpen() {
     isOpen.value = !isOpen.value
@@ -19,5 +20,18 @@ export const useWidgetStore = defineStore('widget', () => {
     }
   }
 
-  return { isOpen, isMaximized, toggleOpen, toggleMaximize }
+  function acceptConsent() {
+    hasConsent.value = true
+  }
+
+  function resetConsent() {
+    hasConsent.value = false
+  }
+
+  return { isOpen, isMaximized, hasConsent, toggleOpen, toggleMaximize, acceptConsent, resetConsent }
+}, {
+  persist: {
+    key: 'nexus/widget',
+    pick: ['hasConsent'],
+  },
 })

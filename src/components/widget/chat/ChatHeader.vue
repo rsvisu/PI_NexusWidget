@@ -22,8 +22,6 @@ function handleClose() {
 function handleMaximize() {
   widget.toggleMaximize()
 }
-
-
 </script>
 
 <template>
@@ -35,7 +33,8 @@ function handleMaximize() {
     </div>
     <!-- Actions -->
     <div
-      class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100">
+      class="flex items-center gap-2 text-white *:size-7 *:p-1 *:cursor-pointer *:hover:text-gray-200 *:rounded-full *:bg-brand-light *:transition-colors *:duration-100"
+    >
       <Maximize v-if="!isMobile && !widget.isMaximized" @click="handleMaximize" />
       <Minimize v-if="!isMobile && widget.isMaximized" @click="handleMaximize" />
       <MinimizeFill @click="handleClose" />

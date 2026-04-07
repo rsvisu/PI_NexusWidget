@@ -1,6 +1,7 @@
 <script setup>
-import Minimize from '~icons/mingcute/minimize-fill'
 import Maximize from '~icons/gg/maximize-alt'
+import Minimize from '~icons/gg/minimize'
+import MinimizeFill from '~icons/mingcute/minimize-fill'
 import Close from '~icons/material-symbols/close'
 import { useWidgetStore } from '@/stores/widget'
 
@@ -9,7 +10,11 @@ const widget = useWidgetStore()
 
 // Funciones
 function handleClose() {
-  widget.toggle()
+  widget.toggleOpen()
+}
+
+function handleMaximize() {
+  widget.toggleMaximize()
 }
 </script>
 
@@ -22,11 +27,10 @@ function handleClose() {
     </div>
     <!-- Actions -->
     <div
-      class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100"
-    >
-      <!-- <Minimize /> -->
-      <Maximize />
-      <Close @click="handleClose" />
+      class="flex items-center gap-2 text-white *:size-6 *:cursor-pointer *:hover:text-gray-200 *:transition-colors *:duration-100">
+      <Maximize v-if="!widget.isMaximized" @click="handleMaximize" />
+      <Minimize v-if="widget.isMaximized" @click="handleMaximize" />
+      <MinimizeFill @click="handleClose" />
     </div>
   </div>
 </template>

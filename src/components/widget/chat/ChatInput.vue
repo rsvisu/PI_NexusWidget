@@ -17,7 +17,7 @@ const messageDomInput = ref(null)
 // Watchers:
 // Enfocar el textarea cuando se abra el chat
 watch(
-  () => widget.open,
+  () => widget.isOpen,
   (isOpen) => {
     // Si el widget se esta abriendo, enfocamos el input
     if (isOpen) {
@@ -71,19 +71,11 @@ function sendMessage(message) {
 <template>
   <div class="p-4 border-t border-gray-200 bg-gray-100">
     <div class="flex bg-white border border-gray-300 rounded-md">
-      <textarea
-        rows="1"
-        placeholder="Escribe tu mensaje..."
+      <textarea rows="1" placeholder="Escribe tu mensaje..."
         class="w-full max-h-30 p-2 rounded-md focus:outline-none resize-none overflow-y-auto no-scrollbar"
-        ref="messageDomInput"
-        v-model="messageText"
-        @input="autoResize"
-        @keydown="handleEnterButton"
-      ></textarea>
-      <button
-        class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors"
-        @click="handleSend"
-      >
+        ref="messageDomInput" v-model="messageText" @input="autoResize" @keydown="handleEnterButton"></textarea>
+      <button class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors"
+        @click="handleSend">
         <Send class="text-brand size-8" />
       </button>
     </div>
@@ -96,9 +88,12 @@ function sendMessage(message) {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 /* Para IE, Edge y Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 </style>

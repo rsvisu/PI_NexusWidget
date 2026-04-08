@@ -15,21 +15,34 @@ const messageText = ref('')
 const messageInputRef = ref(null)
 
 // Watchers:
-// Enfocar el textarea cuando se abra el chat
+// Enfocar el input cuando se abra el chat
 watch(
   () => widget.isOpen,
-  (isOpen) => {
+  async (isOpen) => {
     // Si el widget se esta abriendo, enfocamos el input
     if (isOpen) {
       // Esperamos hasta el siguiente tick para esperar a que este disponible
-      nextTick(() => {
-        messageInputRef.value?.focus()
-      })
+      await nextTick()
+      focusInput()
+    }
+  },
+)
+
+// Enfocar el input cuando después de la respusta del asistente
+watch(
+  () => chat.isLoading,
+  async (isLoading) => {
+    if (!isLoading) {
+      await nextTick()
+      focusInput()
     }
   },
 )
 
 // Funciones:
+// Focus el input
+const focusInput = () => messageInputRef.value?.focus()
+
 // Autoajustar la altura del textarea
 function autoResize() {
   const textarea = messageInputRef.value

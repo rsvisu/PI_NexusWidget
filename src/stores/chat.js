@@ -2,11 +2,13 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+// Funciones:
 function forgetStoredData() {
   localStorage.removeItem('nexus/chat')
   globalThis.location.reload()
 }
 
+// Store:
 export const useChatStore = defineStore('chat', () => {
   // Variables:
   const messages = ref([
@@ -60,7 +62,8 @@ export const useChatStore = defineStore('chat', () => {
   return { messages, isLoading, sendMessage, forgetStoredData }
 }, {
   persist: {
-    key: 'nexus/chat'
+    key: 'nexus/chat',
+    pick: ['messages'],
   }
 
 })

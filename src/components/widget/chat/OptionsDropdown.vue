@@ -47,7 +47,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="relative flex justify-center items-center" ref="optionsMenuRef">
+  <div class="relative" ref="optionsMenuRef">
     <button type="button" class="cursor-pointer w-full h-full" @click="toggleOptionsMenu">
       <MoreVert class="w-full h-full cursor-pointer" />
     </button>

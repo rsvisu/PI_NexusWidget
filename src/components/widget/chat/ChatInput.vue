@@ -81,8 +81,8 @@ function handleSend() {
     <div class="flex bg-white border border-gray-300 rounded-md">
       <textarea
         rows="1"
-        placeholder="Escribe tu mensaje..."
-        class="w-full max-h-30 p-2 rounded-md focus:outline-none resize-none overflow-y-auto no-scrollbar"
+        :placeholder="chat.isLoading ? 'Nexus respondiendo...' : 'Escribe tu mensaje...'"
+        class="w-full max-h-30 p-2 rounded-md focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400 disabled:opacity-60 resize-none overflow-y-auto no-scrollbar"
         :disabled="chat.isLoading"
         ref="messageInputRef"
         v-model="messageText"
@@ -90,8 +90,9 @@ function handleSend() {
         @keydown="handleEnterButton"
       ></textarea>
       <button
-        class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors"
+        class="cursor-pointer px-4 ml-4 border-l border-gray-300 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:hover:bg-white"
         @click="handleSend"
+        :disabled="chat.isLoading"
       >
         <Send class="text-brand size-8" />
       </button>

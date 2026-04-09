@@ -60,6 +60,7 @@ async function copyMessage() {
     >
       <button
         type="button"
+        tabindex="-1"
         class="p-1 rounded hover:bg-gray-200 transition-colors cursor-pointer"
         @click="copyMessage"
       >

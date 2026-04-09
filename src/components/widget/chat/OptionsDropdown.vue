@@ -48,8 +48,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="relative" ref="optionsMenuRef">
-    <button type="button" class="cursor-pointer w-full h-full" @click="toggleOptionsMenu">
-      <MoreVert class="w-full h-full cursor-pointer" />
+    <button class="cursor-pointer" @click="toggleOptionsMenu">
+      <MoreVert />
     </button>
 
     <Transition name="dropdown-fade">

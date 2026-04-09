@@ -35,9 +35,18 @@ function handleMaximize() {
     <div
       class="flex items-center gap-2 text-white *:size-7 *:p-1 *:cursor-pointer *:hover:text-gray-200 *:rounded-full *:bg-brand-light *:transition-colors *:duration-100"
     >
-      <Maximize v-if="!isMobile && !widget.isMaximized" @click="handleMaximize" />
-      <Minimize v-if="!isMobile && widget.isMaximized" @click="handleMaximize" />
-      <MinimizeFill @click="handleClose" />
+      <button v-if="!isMobile && !widget.isMaximized" @click="handleMaximize">
+        <Maximize />
+      </button>
+
+      <button v-if="!isMobile && widget.isMaximized" @click="handleMaximize">
+        <Minimize />
+      </button>
+
+      <button @click="handleClose">
+        <MinimizeFill />
+      </button>
+
       <OptionsDropdown />
     </div>
   </div>

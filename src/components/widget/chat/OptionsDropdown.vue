@@ -30,6 +30,15 @@ function handleForgetData() {
   closeOptionsMenu()
 }
 
+/**
+ * Comprueba si el elemento clickado no es ninguno
+ * de los elementos dentro del dropdown; y cuando es
+ * asi cierra el dropdown
+ *
+ * Es decir, cierra el dropdown cuando se clicka
+ * fuera de el
+ * @param event
+ */
 function handleDocumentClick(event) {
   if (!optionsMenuRef.value.contains(event.target)) {
     closeOptionsMenu()

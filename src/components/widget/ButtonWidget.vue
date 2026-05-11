@@ -8,14 +8,14 @@ const widget = useWidgetStore()
 </script>
 
 <template>
-  <div
+  <button
     class="p-1 size-20 rounded-full bg-brand hover:bg-brand-dark shadow-xs shadow-black/20 cursor-pointer flex items-center justify-center"
   >
     <Transition name="button">
       <img v-if="!widget.isOpen" :src="logoFace" alt="Chatbot Widget" />
       <KeyboardArrowDown v-else :class="`text-white size-10`" />
     </Transition>
-  </div>
+  </button>
 </template>
 
 <style>

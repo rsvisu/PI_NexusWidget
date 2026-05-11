@@ -25,9 +25,9 @@ function closeOptionsMenu() {
 }
 
 function handleForgetData() {
-  widget.forgetStoredData()
-  chat.forgetStoredData()
-  closeOptionsMenu()
+  widget.toggleOpen()
+  chat.forgetData()
+  widget.forgetData()
 }
 
 /**

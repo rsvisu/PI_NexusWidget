@@ -1,11 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-function forgetStoredData() {
-  localStorage.removeItem('nexus/widget')
-  globalThis.location.reload()
-}
-
 export const useWidgetStore = defineStore('widget', () => {
   const isOpen = ref(false)
   const isMaximized = ref(false)
@@ -33,7 +28,11 @@ export const useWidgetStore = defineStore('widget', () => {
     hasConsent.value = false
   }
 
-  return { isOpen, isMaximized, hasConsent, toggleOpen, toggleMaximize, acceptConsent, resetConsent, forgetStoredData }
+  function forgetData() {
+    resetConsent()
+  }
+
+  return { isOpen, isMaximized, hasConsent, toggleOpen, toggleMaximize, acceptConsent, resetConsent, forgetData }
 }, {
   persist: {
     key: 'nexus/widget',

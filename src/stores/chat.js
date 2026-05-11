@@ -2,24 +2,18 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-// Variables:
+// # Constantes:
 const API_URL = "http://localhost:3000"
 const GREETING = { content: "¡Hola! Soy el asistente de Los Enlaces, ¿en qué puedo ayudarte?", sender_type: "assistant" }
 
-// Funciones:
-function forgetStoredData() {
-  localStorage.removeItem('nexus/chat')
-  globalThis.location.reload()
-}
-
-// Store:
+// # Store:
 export const useChatStore = defineStore('chat', () => {
-  // Variables:
+  // ## Variables:
   const messages = ref([])
   const isLoading = ref(false)
   const conversation_token = ref(null)
 
-  // Funciones:
+  // ## Funciones Privadas:
   function _addMessage(content, sender_type) {
     messages.value.push({
       index: messages.value.length + 1,
@@ -28,10 +22,29 @@ export const useChatStore = defineStore('chat', () => {
     })
   }
 
+  function _generateConversationToken() {
+    conversation_token.value = crypto.randomUUID()
+  }
+
+  async function _deleteHistory() {
+    if (!conversation_token.value) return
+
+    try {
+      await axios.delete(`${API_URL}/api/chat/history/${conversation_token.value}`)
+    } catch (error) {
+      console.error("Error al borrar el historial:", error)
+    } finally {
+      // Limpiamos el estado local aunque falle la petición
+      messages.value = [GREETING]
+      _generateConversationToken()
+    }
+  }
+
+  // ## Funciones:
   async function loadMessages() {
     // Generamos un token de conversación si no existe
     if (!conversation_token.value) {
-      conversation_token.value = crypto.randomUUID()
+      _generateConversationToken()
     }
 
     // Recuperamos el historial
@@ -77,7 +90,13 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
 
-  return { messages, isLoading, conversation_token, loadMessages, sendMessage, forgetStoredData }
+  async function forgetData() {
+    localStorage.removeItem('nexus/chat')
+    await _deleteHistory()
+  }
+
+  // conversation_token se expone solo para que el plugin de persistencia lo guarde en localStorage
+  return { messages, isLoading, conversation_token, loadMessages, sendMessage, forgetData }
 }, {
   persist: {
     key: 'nexus/chat',

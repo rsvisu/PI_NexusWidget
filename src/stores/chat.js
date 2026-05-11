@@ -3,7 +3,9 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 // # Constantes:
-const API_URL = "http://localhost:3000"
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+})
 const GREETING = { content: "¡Hola! Soy el asistente de Los Enlaces, ¿en qué puedo ayudarte?", sender_type: "assistant" }
 
 // # Store:
@@ -30,7 +32,7 @@ export const useChatStore = defineStore('chat', () => {
     if (!conversation_token.value) return
 
     try {
-      await axios.delete(`${API_URL}/api/chat/history/${conversation_token.value}`)
+      await api.delete(`/api/chat/history/${conversation_token.value}`)
     } catch (error) {
       console.error("Error al borrar el historial:", error)
     } finally {
@@ -49,7 +51,7 @@ export const useChatStore = defineStore('chat', () => {
 
     // Recuperamos el historial
     try {
-      const response = await axios.get(`${API_URL}/api/chat/history/${conversation_token.value}`)
+      const response = await api.get(`/api/chat/history/${conversation_token.value}`)
       messages.value = [GREETING, ...response.data.messages]
     } catch (error) {
       if (error.response?.status === 404) {
@@ -74,7 +76,7 @@ export const useChatStore = defineStore('chat', () => {
 
     try {
       // Petición al backend
-      const response = await axios.post(`${API_URL}/api/chat`, {
+      const response = await api.post(`/api/chat`, {
         message: message,
         conversation_token: conversation_token.value
       })

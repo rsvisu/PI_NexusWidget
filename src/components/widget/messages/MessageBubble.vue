@@ -1,8 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import CopyIcon from '~icons/material-symbols/content-copy-rounded'
 
-// Props:
+// ## Props:
 const props = defineProps({
   message: {
     type: String,
@@ -14,11 +16,11 @@ const props = defineProps({
   },
 })
 
-// Variables:
+// ## Variables:
 const copied = ref(false)
 const isUserMessage = computed(() => props.role === 'user')
 
-// Clases dinamicas:
+// ## Clases dinamicas:
 const bubbleClasses = computed(() =>
   isUserMessage.value ? 'self-end items-end' : 'self-start items-start',
 )
@@ -31,7 +33,13 @@ const messageClasses = computed(() =>
 
 const copiedClasses = computed(() => (isUserMessage.value ? 'flex-row-reverse' : ''))
 
-// Funciones:
+// ## Computed:
+// Convierte el markdown a HTML para mostrarlo con estilos
+const renderedMessage = computed(() => {
+  return DOMPurify.sanitize(marked.parse(props.message))
+})
+
+// ## Funciones:
 // Funcion copiar mensaje
 async function copyMessage() {
   try {
@@ -48,14 +56,22 @@ async function copyMessage() {
 </script>
 
 <template>
-  <div class="message-bubble mt-2 max-w-[90%] flex flex-col" :class="bubbleClasses">
+  <div class="group mt-2 max-w-[90%] flex flex-col" :class="bubbleClasses">
     <!-- Message -->
     <div class="wrap-break-word px-4 py-2 rounded-xl shadow-sm" :class="messageClasses">
-      {{ props.message }}
+      <!-- Bot Message -->
+      <div
+        v-if="!isUserMessage"
+        v-html="renderedMessage"
+        class="prose max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
+      />
+      <!-- User Message -->
+      <span v-else>{{ message }}</span>
     </div>
+
     <!-- Copy Button -->
     <div
-      class="copy-actions flex items-center gap-2 mt-1 px-1 text-xs text-muted"
+      class="flex items-center gap-2 mt-1 px-1 text-xs text-muted opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity"
       :class="copiedClasses"
     >
       <button
@@ -66,20 +82,7 @@ async function copyMessage() {
       >
         <CopyIcon class="size-4" />
       </button>
-      <span v-if="copied" class="text-brand"> Copiado </span>
+      <span v-if="copied" class="text-brand">Copiado</span>
     </div>
   </div>
 </template>
-
-<style scoped>
-.message-bubble .copy-actions {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 150ms ease;
-}
-
-.message-bubble:hover .copy-actions {
-  opacity: 1;
-  pointer-events: auto;
-}
-</style>

@@ -55,7 +55,7 @@ async function copyMessage() {
     </div>
     <!-- Copy Button -->
     <div
-      class="copy-actions flex items-center gap-2 mt-1 px-1 text-xs text-chat-text-muted"
+      class="copy-actions flex items-center gap-2 mt-1 px-1 text-xs text-muted"
       :class="copiedClasses"
     >
       <button

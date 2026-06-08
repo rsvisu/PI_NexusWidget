@@ -5,11 +5,7 @@
     <div class="flex flex-row items-center justify-between px-10 py-4 max-w-7xl mx-auto">
       <div>
         <a href="#">
-          <img
-            src="https://cpilosenlaces.com/wp-content/uploads/2023/03/cpifp-los-enlaces-2x.png"
-            alt="Logo Los Enlaces"
-            class="h-15"
-          />
+          <img src="/examplepage/logo.png" alt="Logo Los Enlaces" class="h-15" />
         </a>
       </div>
       <ul class="flex gap-4">
@@ -21,9 +17,7 @@
   </nav>
   <main class="h-full">
     <!-- Hero Section -->
-    <section
-      class="bg-cover bg-right bg-[url('https://cpilosenlaces.com/wp-content/uploads/2023/05/cpienlaces-home-2.jpg')]"
-    >
+    <section class="bg-cover bg-right bg-[url('/examplepage/home.jpg')]">
       <div class="max-w-7xl mx-auto py-20 px-10">
         <div class="w-100">
           <h1 class="text-6xl font-bold">Pensando en tu futuro</h1>
@@ -62,7 +56,7 @@
         </p>
       </div>
       <img
-        src="https://cpilosenlaces.com/wp-content/uploads/2023/04/los-enlaces-centro-400x266.jpg"
+        src="/examplepage/centro.jpg"
         alt="Centro CPIFP Los Enlaces"
         class="shadow-md/30 shadow-black"
       />

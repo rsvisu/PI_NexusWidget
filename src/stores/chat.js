@@ -14,11 +14,14 @@ export const useChatStore = defineStore('chat', () => {
   const messages = ref([])
   const isLoading = ref(false)
   const conversation_token = ref(null)
+  // Votos emitidos, indexados por id de mensaje: { [message_id]: 'positive' | 'negative' }
+  const feedback = ref({})
 
-  // ## Funciones Privadas:
-  function _addMessage(content, sender_type) {
+  // ## Funciones privadas:
+  function _addMessage(content, sender_type, id = null) {
     messages.value.push({
       index: messages.value.length + 1,
+      id,
       sender_type,
       content
     })
@@ -81,8 +84,8 @@ export const useChatStore = defineStore('chat', () => {
         conversation_token: conversation_token.value
       })
 
-      // Añadimos la respuesta de la IA
-      _addMessage(response.data.content, "assistant")
+      // Añadimos la respuesta de la IA con su id para poder votarla después
+      _addMessage(response.data.content, "assistant", response.data.id)
 
     } catch (error) {
       console.error("Error al comunicarse con el backend:", error)
@@ -92,17 +95,44 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
 
+  async function sendFeedback(message_id, vote) {
+    // El saludo inicial y los mensajes del usuario no tienen id, no se votan
+    if (!message_id) return
+
+    // Aplicamos el voto en la UI de forma optimista antes de confirmarlo en el backend
+    const previous = feedback.value[message_id]
+    feedback.value[message_id] = vote
+
+    try {
+      await api.post('/api/chat/feedback', {
+        message_id,
+        vote,
+        conversation_token: conversation_token.value
+      })
+    } catch (error) {
+      console.error("Error al enviar el feedback:", error)
+      // Revertimos el voto si el backend lo rechaza
+      if (previous) {
+        feedback.value[message_id] = previous
+      } else {
+        delete feedback.value[message_id]
+      }
+    }
+  }
+
   async function forgetData() {
     localStorage.removeItem('nexus/chat')
+    // Los votos pertenecen a la conversación que se borra
+    feedback.value = {}
     await _deleteHistory()
   }
 
-  // conversation_token se expone solo para que el plugin de persistencia lo guarde en localStorage
-  return { messages, isLoading, conversation_token, loadMessages, sendMessage, forgetData }
+  // conversation_token y feedback se exponen para que el plugin los guarde en localStorage
+  return { messages, isLoading, conversation_token, feedback, loadMessages, sendMessage, sendFeedback, forgetData }
 }, {
   persist: {
     key: 'nexus/chat',
-    pick: ['conversation_token'],
+    pick: ['conversation_token', 'feedback'],
   }
 
 })

@@ -3,6 +3,10 @@ import { computed, ref } from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import CopyIcon from '~icons/material-symbols/content-copy-rounded'
+import ThumbUpOutline from '~icons/material-symbols/thumb-up-outline'
+import ThumbUpFilled from '~icons/material-symbols/thumb-up'
+import ThumbDownOutline from '~icons/material-symbols/thumb-down-outline'
+import ThumbDownFilled from '~icons/material-symbols/thumb-down'
 
 // ## Props:
 const props = defineProps({
@@ -14,11 +18,35 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  // id del mensaje en la BD; null para el saludo inicial (no votable)
+  messageId: {
+    type: Number,
+    default: null,
+  },
+  // Voto actual de este mensaje: 'positive', 'negative' o null
+  vote: {
+    type: String,
+    default: null,
+  },
 })
+
+// ## Emits:
+const emit = defineEmits(['feedback'])
 
 // ## Variables:
 const copied = ref(false)
 const isUserMessage = computed(() => props.role === 'user')
+// Solo se votan las respuestas del asistente que ya están guardadas en la BD
+const canVote = computed(() => !isUserMessage.value && props.messageId !== null)
+
+// ## Funciones de voto:
+function castVote(value) {
+  // Si ya estaba ese voto activo no hacemos nada
+  if (props.vote === value) {
+    return
+  }
+  emit('feedback', value)
+}
 
 // ## Clases dinamicas:
 const bubbleClasses = computed(() =>
@@ -69,10 +97,11 @@ async function copyMessage() {
       <span v-else>{{ message }}</span>
     </div>
 
-    <!-- Copy Button -->
+    <!-- Acciones del mensaje -->
+    <!-- Mantenemos visible la barra si hay un voto emitido para que no desaparezca al quitar el ratón -->
     <div
-      class="flex items-center gap-2 mt-1 px-1 text-xs text-muted opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity"
-      :class="copiedClasses"
+      class="flex items-center gap-2 mt-1 px-1 text-xs text-muted pointer-events-none group-hover:pointer-events-auto transition-opacity"
+      :class="[copiedClasses, vote ? 'opacity-100' : 'opacity-0 group-hover:opacity-100']"
     >
       <button
         type="button"
@@ -83,6 +112,32 @@ async function copyMessage() {
         <CopyIcon class="size-4" />
       </button>
       <span v-if="copied" class="text-brand">Copiado</span>
+
+      <!-- Voto: solo en respuestas del asistente ya guardadas -->
+      <template v-if="canVote">
+        <button
+          type="button"
+          tabindex="-1"
+          class="p-1 rounded hover:bg-gray-200 transition-colors cursor-pointer"
+          :class="vote === 'positive' ? 'text-brand' : ''"
+          title="Respuesta útil"
+          @click="castVote('positive')"
+        >
+          <ThumbUpFilled v-if="vote === 'positive'" class="size-4" />
+          <ThumbUpOutline v-else class="size-4" />
+        </button>
+        <button
+          type="button"
+          tabindex="-1"
+          class="p-1 rounded hover:bg-gray-200 transition-colors cursor-pointer"
+          :class="vote === 'negative' ? 'text-red-500' : ''"
+          title="Respuesta poco útil"
+          @click="castVote('negative')"
+        >
+          <ThumbDownFilled v-if="vote === 'negative'" class="size-4" />
+          <ThumbDownOutline v-else class="size-4" />
+        </button>
+      </template>
     </div>
   </div>
 </template>

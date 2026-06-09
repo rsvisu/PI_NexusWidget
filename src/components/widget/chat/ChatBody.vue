@@ -40,8 +40,9 @@ watch(
 
 <template>
   <div class="flex-1 min-h-0 flex flex-col p-4 py-2 overflow-y-scroll" ref="chatContainerRef">
-    <MessageBubble v-for="message in chat.messages" :key="message.index" :message="message.content"
-      :role="message.sender_type" />
+    <MessageBubble v-for="(message, i) in chat.messages" :key="message.id ?? i" :message="message.content"
+      :role="message.sender_type" :message-id="message.id ?? null" :vote="chat.feedback[message.id] ?? null"
+      @feedback="(vote) => chat.sendFeedback(message.id, vote)" />
     <TypingIndicator v-if="chat.isLoading" />
   </div>
 </template>

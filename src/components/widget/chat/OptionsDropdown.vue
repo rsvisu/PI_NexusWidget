@@ -25,14 +25,19 @@ function closeOptionsMenu() {
 }
 
 function handleNewConversation() {
-  chat.newConversation()
   closeOptionsMenu()
+  widget.showConfirm(
+    'Iniciarás una conversación nueva. La anterior no se borrará de nuestros servidores, pero ya no podrás acceder a ella.',
+    () => chat.newConversation()
+  )
 }
 
 function handleForgetData() {
-  widget.toggleOpen()
-  chat.forgetData()
-  widget.resetConsent()
+  closeOptionsMenu()
+  widget.showConfirm(
+    'Esta acción es irreversible. Tu conversación se borrará de nuestros servidores y no podrás recuperarla.',
+    () => { widget.toggleOpen(); chat.forgetData(); widget.resetConsent() }
+  )
 }
 
 /**

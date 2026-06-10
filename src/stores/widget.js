@@ -9,6 +9,13 @@ export const useWidgetStore = defineStore('widget', () => {
   // Solo hasConsent persiste en localStorage; isOpen e isMaximized se reinician en cada sesión
   const hasConsent = ref(false)
 
+  // Estado del diálogo de confirmación
+  const confirmDialog = ref({
+    show: false,
+    message: '',
+    onConfirm: null,
+  })
+
   // ## Funciones:
   function toggleOpen() {
     isOpen.value = !isOpen.value
@@ -34,7 +41,19 @@ export const useWidgetStore = defineStore('widget', () => {
     hasConsent.value = false
   }
 
-  return { isOpen, isMaximized, hasConsent, toggleOpen, toggleMaximize, acceptConsent, resetConsent }
+  function showConfirm(message, onConfirm) {
+    confirmDialog.value.show = true
+    confirmDialog.value.message = message
+    confirmDialog.value.onConfirm = onConfirm
+  }
+
+  function hideConfirm() {
+    confirmDialog.value.show = false
+    confirmDialog.value.message = ''
+    confirmDialog.value.onConfirm = null
+  }
+
+  return { isOpen, isMaximized, hasConsent, confirmDialog, toggleOpen, toggleMaximize, acceptConsent, resetConsent, showConfirm, hideConfirm }
 }, {
   persist: {
     key: 'nexus/widget',

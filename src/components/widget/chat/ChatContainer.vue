@@ -5,6 +5,7 @@ import ChatInput from './ChatInput.vue'
 import ChatHeader from './ChatHeader.vue'
 import ChatBody from './ChatBody.vue'
 import ChatConsent from '../legal/ChatConsent.vue'
+import ConfirmDialog from '../ConfirmDialog.vue'
 
 // Stores:
 const widget = useWidgetStore()
@@ -37,5 +38,12 @@ onBeforeUnmount(() => {
       <ChatBody />
       <ChatInput />
     </template>
+
+    <ConfirmDialog
+      v-if="widget.confirmDialog.show"
+      :message="widget.confirmDialog.message"
+      @confirm="widget.confirmDialog.onConfirm(); widget.hideConfirm()"
+      @cancel="widget.hideConfirm()"
+    />
   </div>
 </template>

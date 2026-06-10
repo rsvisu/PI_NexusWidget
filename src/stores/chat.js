@@ -75,11 +75,12 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     try {
+      // El historial ya incluye el saludo persistido como primer mensaje
       const response = await api.get(`/api/chat/history/${conversation_token.value}`)
-      messages.value = [greeting.value, ...response.data.messages]
+      messages.value = response.data.messages
     } catch (error) {
       if (error.response?.status === 404) {
-        // Primera visita, no hay conversación todavía
+        // Primera visita: la conversación aún no existe, así que el saludo solo está en local
         messages.value = [greeting.value]
       } else {
         console.error("Error al cargar el historial:", error)

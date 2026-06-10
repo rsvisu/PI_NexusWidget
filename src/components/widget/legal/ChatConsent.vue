@@ -1,5 +1,5 @@
 <script setup>
-import { PRIVACY_POLICY_URL } from '@/config/legal'
+import config from '@/config/app'
 import { useWidgetStore } from '@/stores/widget';
 
 const widget = useWidgetStore()
@@ -12,7 +12,7 @@ const widget = useWidgetStore()
         Antes de iniciar la conversacion, necesitamos tu consentimiento para tratar los datos de esta sesion
         con el fin de responder tus consultas.
       </p>
-      <a :href="PRIVACY_POLICY_URL" target="_blank" class="text-brand underline hover:text-brand-dark">
+      <a :href="config.legal.privacyPolicyUrl" target="_blank" class="text-brand underline hover:text-brand-dark">
         Ver politica de privacidad
       </a>
       <button type="button"

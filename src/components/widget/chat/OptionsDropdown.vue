@@ -1,6 +1,6 @@
 <script setup>
 import MoreVert from '~icons/material-symbols/more-vert'
-import { PRIVACY_POLICY_URL } from '@/config/legal'
+import config from '@/config/app'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useWidgetStore } from '@/stores/widget'
 import { useChatStore } from '@/stores/chat'
@@ -27,7 +27,7 @@ function closeOptionsMenu() {
 function handleForgetData() {
   widget.toggleOpen()
   chat.forgetData()
-  widget.forgetData()
+  widget.resetConsent()
 }
 
 /**
@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
           Olvidar mis datos
         </button>
         <a
-          :href="PRIVACY_POLICY_URL"
+          :href="config.legal.privacyPolicyUrl"
           target="_blank"
           rel="noopener noreferrer"
           class="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"

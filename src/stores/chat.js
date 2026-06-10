@@ -1,12 +1,12 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import config from '@/config/app'
 
 // # Constantes:
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 })
-const GREETING = { content: "¡Hola! Soy el asistente de Los Enlaces, ¿en qué puedo ayudarte?", sender_type: "assistant" }
 
 // # Store:
 export const useChatStore = defineStore('chat', () => {
@@ -14,7 +14,7 @@ export const useChatStore = defineStore('chat', () => {
   const messages = ref([])
   const isLoading = ref(false)
   const conversation_token = ref(null)
-  // Votos emitidos, indexados por id de mensaje: { [message_id]: 'positive' | 'negative' }
+  // Mapa de votos por id de mensaje: { [message_id]: 'positive' | 'negative' }
   const feedback = ref({})
 
   // ## Funciones privadas:
@@ -40,26 +40,24 @@ export const useChatStore = defineStore('chat', () => {
       console.error("Error al borrar el historial:", error)
     } finally {
       // Limpiamos el estado local aunque falle la petición
-      messages.value = [GREETING]
+      messages.value = [config.chat.greeting]
       _generateConversationToken()
     }
   }
 
   // ## Funciones:
   async function loadMessages() {
-    // Generamos un token de conversación si no existe
     if (!conversation_token.value) {
       _generateConversationToken()
     }
 
-    // Recuperamos el historial
     try {
       const response = await api.get(`/api/chat/history/${conversation_token.value}`)
-      messages.value = [GREETING, ...response.data.messages]
+      messages.value = [config.chat.greeting, ...response.data.messages]
     } catch (error) {
       if (error.response?.status === 404) {
         // Primera visita, no hay conversación todavía
-        messages.value = [GREETING]
+        messages.value = [config.chat.greeting]
       } else {
         console.error("Error al cargar el historial:", error)
       }
@@ -67,24 +65,19 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   async function sendMessage(message) {
-    // Validación
     message = message.trim()
     if (!message) return
 
-    // Añadimos el mensaje del usuario
     _addMessage(message, "user")
-
-    // Activamos la carga
     isLoading.value = true
 
     try {
-      // Petición al backend
       const response = await api.post(`/api/chat`, {
         message: message,
         conversation_token: conversation_token.value
       })
 
-      // Añadimos la respuesta de la IA con su id para poder votarla después
+      // Guardamos el id para poder votar la respuesta después
       _addMessage(response.data.content, "assistant", response.data.id)
 
     } catch (error) {
@@ -96,11 +89,11 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   async function sendFeedback(message_id, vote) {
-    // El saludo inicial y los mensajes del usuario no tienen id, no se votan
+    // El saludo inicial y los mensajes de usuario no tienen id, no se votan
     if (!message_id) return
 
-    // Aplicamos el voto en la UI de forma optimista antes de confirmarlo en el backend
-    const previous = feedback.value[message_id]
+    // Actualizamos la UI antes de confirmar en el backend (optimistic update)
+    const previousVote = feedback.value[message_id]
     feedback.value[message_id] = vote
 
     try {
@@ -111,9 +104,8 @@ export const useChatStore = defineStore('chat', () => {
       })
     } catch (error) {
       console.error("Error al enviar el feedback:", error)
-      // Revertimos el voto si el backend lo rechaza
-      if (previous) {
-        feedback.value[message_id] = previous
+      if (previousVote) {
+        feedback.value[message_id] = previousVote
       } else {
         delete feedback.value[message_id]
       }
@@ -127,14 +119,11 @@ export const useChatStore = defineStore('chat', () => {
     await _deleteHistory()
   }
 
-  // conversation_token y feedback se exponen para que el plugin los guarde en localStorage
+  // conversation_token y feedback se exponen para que el plugin los persista en localStorage
   return { messages, isLoading, conversation_token, feedback, loadMessages, sendMessage, sendFeedback, forgetData }
 }, {
   persist: {
     key: 'nexus/chat',
     pick: ['conversation_token', 'feedback'],
   }
-
 })
-
-

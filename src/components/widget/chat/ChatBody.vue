@@ -1,5 +1,6 @@
 <script setup>
 import { useChatStore } from '@/stores/chat'
+import GreetingBubble from '../messages/GreetingBubble.vue'
 import MessageBubble from '../messages/MessageBubble.vue'
 import TypingIndicator from '../messages/TypingIndicator.vue'
 import { computed, nextTick, ref, watch } from 'vue'
@@ -12,9 +13,12 @@ const widget = useWidgetStore()
 // Referencias al DOM:
 const chatContainerRef = ref(null)
 
-// Las sugerencias se muestran solo mientras el usuario no haya enviado ningún mensaje
-const showSuggestions = computed(() => {
-  return chat.suggestions.length > 0 && !chat.messages.some(msg => msg.sender_type === 'user')
+// Las sugerencias solo se muestran mientras no haya ningún mensaje del usuario
+const visibleSuggestions = computed(() => {
+  if (chat.messages.some(msg => msg.sender_type === 'user')) {
+    return []
+  }
+  return chat.suggestions
 })
 
 // Funciones:
@@ -45,22 +49,24 @@ watch(
 
 <template>
   <div class="flex-1 min-h-0 flex flex-col p-4 py-2 overflow-y-scroll" ref="chatContainerRef">
-    <MessageBubble v-for="(message, i) in chat.messages" :key="message.id ?? i" :message="message.content"
-      :role="message.sender_type" :message-id="message.id ?? null" :vote="chat.feedback[message.id] ?? null"
-      @feedback="(vote) => chat.sendFeedback(message.id, vote)" />
+    <!-- Primer mensaje: saludo con sugerencias integradas -->
+    <GreetingBubble
+      v-if="chat.messages.length > 0"
+      :message="chat.messages[0].content"
+      :suggestions="visibleSuggestions"
+      @suggestion-click="chat.sendMessage"
+    />
 
-    <!-- Sugerencias de bienvenida: solo antes de la primera pregunta del usuario -->
-    <div v-if="showSuggestions" class="flex flex-wrap gap-2 mt-3">
-      <button
-        v-for="suggestion in chat.suggestions"
-        :key="suggestion"
-        type="button"
-        class="text-sm px-3 py-1.5 rounded-full border border-brand text-brand hover:bg-brand hover:text-white transition-colors cursor-pointer"
-        @click="chat.sendMessage(suggestion)"
-      >
-        {{ suggestion }}
-      </button>
-    </div>
+    <!-- Resto de mensajes de la conversación -->
+    <MessageBubble
+      v-for="(message, i) in chat.messages.slice(1)"
+      :key="message.id ?? i"
+      :message="message.content"
+      :role="message.sender_type"
+      :message-id="message.id ?? null"
+      :vote="chat.feedback[message.id] ?? null"
+      @feedback="(vote) => chat.sendFeedback(message.id, vote)"
+    />
 
     <TypingIndicator v-if="chat.isLoading" />
   </div>

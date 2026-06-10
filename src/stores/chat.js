@@ -16,6 +16,8 @@ export const useChatStore = defineStore('chat', () => {
   const conversation_token = ref(null)
   // Mapa de votos por id de mensaje: { [message_id]: 'positive' | 'negative' }
   const feedback = ref({})
+  // Saludo inicial; empieza con el respaldo local y se sobrescribe con el del backend
+  const greeting = ref(config.chat.greeting)
 
   // ## Funciones privadas:
   function _addMessage(content, sender_type, id = null) {
@@ -32,7 +34,7 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   function _resetLocalState() {
-    messages.value = [config.chat.greeting]
+    messages.value = [greeting.value]
     feedback.value = {}
     _generateConversationToken()
   }
@@ -51,6 +53,19 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   // ## Funciones:
+  // Carga el saludo configurado en el dashboard; si falla, se queda el respaldo local
+  async function loadWidgetConfig() {
+    try {
+      const response = await api.get('/api/config/public')
+      greeting.value = {
+        content: response.data.greeting,
+        sender_type: 'assistant',
+      }
+    } catch (error) {
+      console.error("Error al cargar la configuración del widget:", error)
+    }
+  }
+
   async function loadMessages() {
     if (!conversation_token.value) {
       _generateConversationToken()
@@ -58,11 +73,11 @@ export const useChatStore = defineStore('chat', () => {
 
     try {
       const response = await api.get(`/api/chat/history/${conversation_token.value}`)
-      messages.value = [config.chat.greeting, ...response.data.messages]
+      messages.value = [greeting.value, ...response.data.messages]
     } catch (error) {
       if (error.response?.status === 404) {
         // Primera visita, no hay conversación todavía
-        messages.value = [config.chat.greeting]
+        messages.value = [greeting.value]
       } else {
         console.error("Error al cargar el historial:", error)
       }
@@ -128,7 +143,7 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   // conversation_token y feedback se exponen para que el plugin los persista en localStorage
-  return { messages, isLoading, conversation_token, feedback, loadMessages, sendMessage, sendFeedback, newConversation, forgetData }
+  return { messages, isLoading, conversation_token, feedback, loadWidgetConfig, loadMessages, sendMessage, sendFeedback, newConversation, forgetData }
 }, {
   persist: {
     key: 'nexus/chat',

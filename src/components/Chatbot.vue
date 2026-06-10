@@ -23,8 +23,9 @@ function handleClick() {
 }
 
 // Ciclo de vida:
-// Al montar la app cargamos el historial si hay token guardado
-onMounted(() => {
+// Cargamos el saludo configurado antes del historial para que ya esté listo al pintar los mensajes
+onMounted(async () => {
+  await chat.loadWidgetConfig()
   chat.loadMessages()
 })
 

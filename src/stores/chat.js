@@ -31,6 +31,12 @@ export const useChatStore = defineStore('chat', () => {
     conversation_token.value = crypto.randomUUID()
   }
 
+  function _resetLocalState() {
+    messages.value = [config.chat.greeting]
+    feedback.value = {}
+    _generateConversationToken()
+  }
+
   async function _deleteHistory() {
     if (!conversation_token.value) return
 
@@ -40,8 +46,7 @@ export const useChatStore = defineStore('chat', () => {
       console.error("Error al borrar el historial:", error)
     } finally {
       // Limpiamos el estado local aunque falle la petición
-      messages.value = [config.chat.greeting]
-      _generateConversationToken()
+      _resetLocalState()
     }
   }
 
@@ -112,15 +117,18 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
 
+  // Reinicia el chat sin tocar el consentimiento ni el historial del backend
+  function newConversation() {
+    _resetLocalState()
+  }
+
   async function forgetData() {
     localStorage.removeItem('nexus/chat')
-    // Los votos pertenecen a la conversación que se borra
-    feedback.value = {}
     await _deleteHistory()
   }
 
   // conversation_token y feedback se exponen para que el plugin los persista en localStorage
-  return { messages, isLoading, conversation_token, feedback, loadMessages, sendMessage, sendFeedback, forgetData }
+  return { messages, isLoading, conversation_token, feedback, loadMessages, sendMessage, sendFeedback, newConversation, forgetData }
 }, {
   persist: {
     key: 'nexus/chat',

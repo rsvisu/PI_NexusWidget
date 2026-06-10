@@ -2,7 +2,8 @@
 import { computed, ref } from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
-import CopyIcon from '~icons/material-symbols/content-copy-rounded'
+import CopyIconOutline from '~icons/material-symbols/content-copy-outline'
+import CopyIconFilled from '~icons/material-symbols/content-copy'
 import ThumbUpOutline from '~icons/material-symbols/thumb-up-outline'
 import ThumbUpFilled from '~icons/material-symbols/thumb-up'
 import ThumbDownOutline from '~icons/material-symbols/thumb-down-outline'
@@ -109,9 +110,9 @@ async function copyMessage() {
         class="p-1 rounded hover:bg-gray-200 transition-colors cursor-pointer"
         @click="copyMessage"
       >
-        <CopyIcon class="size-4" />
+        <CopyIconFilled v-if="copied" class="size-4 text-brand" />
+        <CopyIconOutline v-else class="size-4" />
       </button>
-      <span v-if="copied" class="text-brand">Copiado</span>
 
       <!-- Voto: solo en respuestas del asistente ya guardadas -->
       <template v-if="canVote">

@@ -18,6 +18,8 @@ export const useChatStore = defineStore('chat', () => {
   const feedback = ref({})
   // Saludo inicial; empieza con el respaldo local y se sobrescribe con el del backend
   const greeting = ref(config.chat.greeting)
+  // Sugerencias de bienvenida clicables; vacío hasta que el backend las devuelva
+  const suggestions = ref([])
 
   // ## Funciones privadas:
   function _addMessage(content, sender_type, id = null) {
@@ -61,6 +63,7 @@ export const useChatStore = defineStore('chat', () => {
         content: response.data.greeting,
         sender_type: 'assistant',
       }
+      suggestions.value = response.data.suggestions
     } catch (error) {
       console.error("Error al cargar la configuración del widget:", error)
     }
@@ -143,7 +146,7 @@ export const useChatStore = defineStore('chat', () => {
   }
 
   // conversation_token y feedback se exponen para que el plugin los persista en localStorage
-  return { messages, isLoading, conversation_token, feedback, loadWidgetConfig, loadMessages, sendMessage, sendFeedback, newConversation, forgetData }
+  return { messages, isLoading, conversation_token, feedback, suggestions, loadWidgetConfig, loadMessages, sendMessage, sendFeedback, newConversation, forgetData }
 }, {
   persist: {
     key: 'nexus/chat',

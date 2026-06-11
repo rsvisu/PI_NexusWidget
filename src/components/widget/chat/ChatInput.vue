@@ -99,19 +99,3 @@ function handleSend() {
     </div>
   </div>
 </template>
-
-<style>
-/* Scrollbar */
-/* Para Chrome, Safari y Opera */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-/* Para IE, Edge y Firefox */
-.no-scrollbar {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
-</style>

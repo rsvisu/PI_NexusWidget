@@ -17,21 +17,3 @@ const widget = useWidgetStore()
     </Transition>
   </button>
 </template>
-
-<style>
-/* Animation */
-.button-enter-active,
-.button-leave-active {
-  transition: opacity 0.1s ease;
-}
-
-.button-enter-from,
-.button-leave-to {
-  opacity: 0;
-}
-
-.button-enter-to,
-.button-leave-from {
-  opacity: 1;
-}
-</style>

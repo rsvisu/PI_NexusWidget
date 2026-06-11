@@ -19,3 +19,68 @@
   --color-muted: #6b7280; /* Letra pequeña para fuentes y feedback */
   --color-inverse: #ffffff; /* Texto blanco (para la cabecera y botones naranjas) */
 }
+
+/* Reset base del widget en el shadow root */
+:host {
+  color: var(--color-main);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+/* Animaciones y utilidades del widget */
+/* Viven aquí, en la única hoja del widget, para que entren en el shadow root del build embebible */
+
+/* Botón flotante */
+.button-enter-active,
+.button-leave-active {
+  transition: opacity 0.1s ease;
+}
+.button-enter-from,
+.button-leave-to {
+  opacity: 0;
+}
+.button-enter-to,
+.button-leave-from {
+  opacity: 1;
+}
+
+/* Panel del chat */
+.chat-enter-active,
+.chat-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  transform-origin: bottom right;
+}
+.chat-enter-from,
+.chat-leave-to {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+}
+.chat-enter-to,
+.chat-leave-from {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Menú de opciones */
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.98);
+}
+
+/* Ocultar scrollbar (Chrome, Safari, Opera / IE, Edge, Firefox) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

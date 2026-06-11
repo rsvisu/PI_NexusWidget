@@ -50,7 +50,9 @@ function handleForgetData() {
  * @param event
  */
 function handleDocumentClick(event) {
-  if (!optionsMenuRef.value.contains(event.target)) {
+  // composedPath atraviesa la frontera del shadow DOM; event.target se reescribiría al elemento host
+  const path = event.composedPath()
+  if (!path.includes(optionsMenuRef.value)) {
     closeOptionsMenu()
   }
 }
@@ -101,18 +103,3 @@ onBeforeUnmount(() => {
     </Transition>
   </div>
 </template>
-
-<style scoped>
-.dropdown-fade-enter-active,
-.dropdown-fade-leave-active {
-  transition:
-    opacity 0.16s ease,
-    transform 0.16s ease;
-}
-
-.dropdown-fade-enter-from,
-.dropdown-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-4px) scale(0.98);
-}
-</style>

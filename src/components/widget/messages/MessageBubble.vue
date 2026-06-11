@@ -29,6 +29,11 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  // Chunks RAG usados para generar la respuesta; null si no hubo contexto
+  sources: {
+    type: Array,
+    default: null,
+  },
 })
 
 // ## Emits:
@@ -63,6 +68,21 @@ const messageClasses = computed(() =>
 const copiedClasses = computed(() => (isUserMessage.value ? 'flex-row-reverse' : ''))
 
 // ## Computed:
+// Nombres de documento únicos de los chunks RAG que llegaron
+const sourceNames = computed(() => {
+  if (!props.sources || props.sources.length === 0) {
+    return []
+  }
+  const names = []
+  for (const source of props.sources) {
+    const name = source.document_name
+    if (name && !names.includes(name)) {
+      names.push(name)
+    }
+  }
+  return names
+})
+
 // Convierte el markdown a HTML para mostrarlo con estilos
 const renderedMessage = computed(() => {
   return DOMPurify.sanitize(marked.parse(props.message))
@@ -96,6 +116,14 @@ async function copyMessage() {
       />
       <!-- User Message -->
       <span v-else>{{ message }}</span>
+    </div>
+
+    <!-- Fuentes: documentos consultados para generar esta respuesta -->
+    <div v-if="!isUserMessage && sourceNames.length > 0" class="mt-1 px-1 text-[11px] text-muted/70">
+      <span>Fuente{{ sourceNames.length > 1 ? 's' : '' }}: </span>
+      <span v-for="(name, i) in sourceNames" :key="name">
+        <span v-if="i > 0"> · </span>{{ name }}
+      </span>
     </div>
 
     <!-- Acciones del mensaje -->

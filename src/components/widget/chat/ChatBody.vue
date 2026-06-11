@@ -65,6 +65,7 @@ watch(
       :role="message.sender_type"
       :message-id="message.id ?? null"
       :vote="chat.feedback[message.id] ?? null"
+      :sources="message.sources"
       @feedback="(vote) => chat.sendFeedback(message.id, vote)"
     />
 

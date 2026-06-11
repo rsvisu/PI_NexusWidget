@@ -22,12 +22,13 @@ export const useChatStore = defineStore('chat', () => {
   const suggestions = ref([])
 
   // ## Funciones privadas:
-  function _addMessage(content, sender_type, id = null) {
+  function _addMessage(content, sender_type, id = null, sources = null) {
     messages.value.push({
       index: messages.value.length + 1,
       id,
       sender_type,
-      content
+      content,
+      sources
     })
   }
 
@@ -101,8 +102,8 @@ export const useChatStore = defineStore('chat', () => {
         conversation_token: conversation_token.value
       })
 
-      // Guardamos el id para poder votar la respuesta después
-      _addMessage(response.data.content, "assistant", response.data.id)
+      // Guardamos el id y las fuentes para poder votar y citar la respuesta después
+      _addMessage(response.data.content, "assistant", response.data.id, response.data.sources)
 
     } catch (error) {
       console.error("Error al comunicarse con el backend:", error)

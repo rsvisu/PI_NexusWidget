@@ -32,11 +32,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <ButtonWidget class="fixed bottom-4 right-4" @click="handleClick" />
+  <ButtonWidget class="fixed bottom-4 right-4 z-[9999]" @click="handleClick" />
   <Transition name="chat">
     <ChatContainer v-show="widget.isOpen" class="bg-white shadow-xs shadow-black/20 flex flex-col overflow-hidden"
       :class="widget.isMaximized
-        ? 'fixed inset-0 z-50 w-screen h-screen max-w-none rounded-none'
-        : 'fixed bottom-28 right-4 w-[calc(100vw-2rem)] max-w-104 h-[min(78vh,44rem)] rounded-2xl'" />
+        ? 'fixed inset-0 z-[9999] w-screen h-screen max-w-none rounded-none'
+        : 'fixed bottom-28 right-4 z-[9999] w-[calc(100vw-2rem)] max-w-104 h-[min(78vh,44rem)] rounded-2xl'" />
   </Transition>
 </template>

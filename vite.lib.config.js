@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 import Icons from 'unplugin-icons/vite'
 
 /**
- * Build embebible: genera un único nexus-widget.js autoejecutable para incrustar con un <script>
+ * Build embebible: genera un único embed.js autoejecutable para incrustar con un <script>
  * No lleva vueDevTools (solo desarrollo) ni la SPA de ExamplePage; el entry es src/embed.js
  *
  * https://vite.dev/config/
@@ -43,7 +43,7 @@ export default defineConfig({
       name: 'NexusWidget',
       // iife = un solo archivo autoejecutable, sin sistema de módulos en el navegador
       formats: ['iife'],
-      fileName: () => 'nexus-widget.js',
+      fileName: () => 'embed.js',
     },
   },
 })
